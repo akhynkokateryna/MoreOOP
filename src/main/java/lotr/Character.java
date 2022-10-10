@@ -8,9 +8,9 @@ import lombok.Setter;
 
 public abstract class Character {
     @Getter
-    int hp;
+    public int hp;
     @Getter@Setter
-    int power;
+    public int power;
 
     public void setHp(int hp) {
         this.hp = Math.max(hp, 0);
