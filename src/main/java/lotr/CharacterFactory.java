@@ -1,27 +1,38 @@
 package lotr;
 
-//Character createCharacter() { returns random instance of any existing character }
-
+import lombok.SneakyThrows;
 import org.reflections.Reflections;
 
 import static org.reflections.scanners.Scanners.SubTypes;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 import java.util.Set;
 
 public class CharacterFactory {
-    public Character createCharacter() {
-        Reflections reflections = new Reflections();
+    @SneakyThrows
+    static public Character createCharacter() {
+        Reflections reflections = new Reflections("lotr");
         Random randChoice = new Random();
         Set<Class<?>> subTypes = reflections.get(SubTypes.of(Character.class).asClass());
         subTypes.remove(Noble.class);
-        Character[] arr = (Character[]) subTypes.toArray();
-        return arr[randChoice.nextInt(arr.length)];
+
+        Class[] arr = new Class[subTypes.size()];
+        int ind = 0;
+        for (Class csl : subTypes){
+            arr[ind] = csl;
+            ind++;
+        }
+
+        Class selected = arr[randChoice.nextInt(arr.length-1)];
+        Constructor selectedConstructor = selected.getConstructor();
+        Character selectedCharacter = (Character) selectedConstructor.newInstance();
+        return selectedCharacter;
     }
 
-
     public static void main(String[] args) {
-        CharacterFactory a = new CharacterFactory();
-        System.out.println(a.createCharacter());
+        Character a = createCharacter();
+        System.out.println(a);
     }
 }

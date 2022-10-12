@@ -7,7 +7,7 @@ public class Elf extends Character{
 
     @Override
     public void kick(Character whoKick) {
-        if (whoKick.power < this.power) {
+        if (this.power > whoKick.power) {
             whoKick.setHp(0);
             System.out.println("Elf killed the enemy!");
         } else {
